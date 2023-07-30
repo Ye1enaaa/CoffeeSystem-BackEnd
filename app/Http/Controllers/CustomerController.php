@@ -34,4 +34,12 @@ class CustomerController extends Controller
         ]);
        }
     }
+
+    public function fetchCustomers($user_id){
+        // /$user_id = 1;
+        $customer = Customer::where('user_id', $user_id)->get();
+        return response() -> json([
+            'customer' => $customer
+        ]);
+    }
 }
