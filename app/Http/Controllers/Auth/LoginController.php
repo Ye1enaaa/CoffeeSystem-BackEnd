@@ -36,5 +36,13 @@ class LoginController extends Controller
         return response() -> json([
             'error' => 'Error'
         ], 401  );
+
+        
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 
 Route::post('/login' , [LoginController::class,'login']);
+Route::post('/logout', [LoginController::class, 'logout']);
+
 Route::post('/register/users', [UserController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
