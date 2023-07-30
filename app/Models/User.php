@@ -46,4 +46,8 @@ class User extends Authenticatable
     public function customer(){
         return $this->hasMany(Customer::class, 'user_id');
     }
+
+    public function sorter(){
+        return $this->hasMany(Sorter::class, 'user_id');
+    }
 }
