@@ -15,4 +15,11 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
+
+    public function getCompaniesInfo(){
+        $companies = User::with('customer')->get();
+        return response() -> json([
+            'companies' => $companies
+        ]);
+    }
 }
