@@ -14,8 +14,11 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
 
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
+    Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
 
     Route::post('/add/customer', [CustomerController::class, 'addCustomer']);
     Route::post('/add/sorter', [SorterController::class, 'addSorter']);
 
 });
+
+Route::get('/companies', [UserController::class, 'getCompaniesInfo']);

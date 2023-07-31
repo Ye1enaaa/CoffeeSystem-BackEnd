@@ -26,4 +26,11 @@ class SorterController extends Controller
             'sorter' => $sorter
         ], 200);
     }
+
+    public function fetchSorters($user_id){
+        $sorters = Sorter::where('user_id', $user_id)->get();
+        return response() -> json([
+            'sorters' => $sorters
+        ], 200);
+    }
 }
