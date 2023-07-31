@@ -42,4 +42,39 @@ class CustomerController extends Controller
             'customer' => $customer
         ]);
     }
+
+    //update
+    public function editCustomer(Request $request, $id)
+    {
+        $customer = Customer::findOrFail($id);
+        
+        try {
+            $validatedData = $request->validate([
+                'customerName' => 'nullable',
+                'phoneNum' => 'nullable',
+                'address' => 'nullable'
+            ]);
+            
+            $customer->fill($validatedData);
+            $customer->save();
+            return response()->json([
+                'status' => 'Customer updated successfully',
+                'customer' => $customer
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    //delete
+    public function deleteCustomer($id){
+        $customer = Customer::findOrFail($id);
+        $deleted = $customer->delete();
+        return response() -> json([
+            'deleted' => $deleted,
+            'status' => 'Deleted'
+        ], 200);
+    }
 }
