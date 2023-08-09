@@ -9,7 +9,7 @@ class SorterController extends Controller
     public function addSorter(Request $request){
         $validate = $request->validate([
             'sorterName' => 'required|string|max:50',
-            'phoneNum' => 'required|integer',
+            'phoneNum' => 'required|string',
             'address' => 'required|string|max:100',
             'dateHired' => 'required'
         ]);

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('sorterName');
-            $table->integer('phoneNum');
+            $table->string('phoneNum');
             $table->string('address');
             $table->string('dateHired');
             $table->timestamps();
