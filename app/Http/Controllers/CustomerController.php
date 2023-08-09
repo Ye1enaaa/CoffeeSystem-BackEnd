@@ -10,7 +10,7 @@ class CustomerController extends Controller
        
         $validate = $request->validate([
             'customerName' => 'required|string|max:50',
-            'phoneNum' => 'required|integer',
+            'phoneNum' => 'required|string',
             'address' => 'required|string|max:100'
         ]);
 
@@ -22,7 +22,11 @@ class CustomerController extends Controller
             'phoneNum' => $validate['phoneNum'],
             'address' => $validate['address']
         ]);
-
+        if($validate->fails()){
+            return response()-> json([
+                'error' => $validate->errors()
+            ]);
+        }
         return response() -> json([
             'status' => 'OK',
             'customer' => $customer
