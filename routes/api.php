@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SorterController;
+use App\Http\Controllers\BeanCounterController;
 use App\Http\Controllers\Auth\LoginController;
 
 Route::post('/login' , [LoginController::class,'login']);
@@ -27,3 +28,4 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 });
 
 Route::get('/companies', [UserController::class, 'getCompaniesInfo']);
+Route::get('/count', [BeanCounterController::class, 'fetchBeanCount']);
