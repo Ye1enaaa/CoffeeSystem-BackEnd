@@ -10,8 +10,13 @@ class Status extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'customerName',
         'sorterName',
         'status'
     ];
+
+    public function status(){
+        return $this->belongsTo(User::class);
+    }
 }
