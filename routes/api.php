@@ -19,7 +19,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
     Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
 
-    Route::post('/add/customer', [CustomerController::class, 'addCustomer']);
+    //Route::post('/add/customer', [CustomerController::class, 'addCustomer']);
     Route::post('/add/sorter', [SorterController::class, 'addSorter']);
 
     Route::patch('/edit-customer/{id}', [CustomerController::class, 'editCustomer']);
@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::post('/add-status', [StatusController::class, 'postStatus']);
     Route::get('/fetch-status/{user_id}' , [StatusController::class, 'fetchStatus']);
+
+    Route::post('/add-customer/{user_id}' , [CustomerController::class, 'getCustomerPostHistory']);
 });
 
 Route::get('/companies', [UserController::class, 'getCompaniesInfo']);
