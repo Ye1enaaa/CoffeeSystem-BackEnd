@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\HistoryController;
 Route::post('/login' , [LoginController::class,'login']);
 Route::post('/register/users', [RegisterController::class, 'register']);
 
@@ -33,6 +34,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/fetch-status/{user_id}' , [StatusController::class, 'fetchStatus']);
 
     Route::post('/add-customer/{user_id}' , [CustomerController::class, 'getCustomerPostHistory']);
+
+    Route::get('/fetch-history/{user_id}/{id}' , [HistoryController::class, 'fetchHistoryOfCustomer']);
 });
 
 Route::get('/companies', [UserController::class, 'getCompaniesInfo']);
