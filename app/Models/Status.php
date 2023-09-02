@@ -13,6 +13,7 @@ class Status extends Model
         'user_id',
         'customerName',
         'sorterName',
+        'kiloOfBeans',
         'status'
     ];
 

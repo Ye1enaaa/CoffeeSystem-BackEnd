@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phoneNum');
             $table->string('address');
             $table->string('date');
-            $table->string('kiloOfBeans');
+            //$table->string('kiloOfBeans');
             $table->timestamps();
             $table->foreign('user_id')
                 ->references('id')->on('users')

@@ -48,7 +48,7 @@ class CustomerController extends Controller
         $customerName = $request->input('customerName');
         $phoneNum = $request->input('phoneNum');
         $address = $request->input('address');
-        $kiloOfBeans = $request->input('kiloOfBeans');
+        //$kiloOfBeans = $request->input('kiloOfBeans');
         $date = $request->input('date');
 
         $existingCustomer = Customer::where('user_id', $user_id)
@@ -56,23 +56,22 @@ class CustomerController extends Controller
                 ->first();
 
         if($existingCustomer){
-            $history = History::create([
-                'customer_id' => $existingCustomer->id,
-                'customerName' => $existingCustomer->customerName,
-                'kiloOfBeans' => $kiloOfBeans,
-                'date' => now()
-            ]);
-            
+            // $history = History::create([
+            //     'customer_id' => $existingCustomer->id,
+            //     'customerName' => $existingCustomer->customerName,
+            //     'kiloOfBeans' => $kiloOfBeans,
+            //     'date' => now()
+            // ]);     
             return response() -> json([
-                'history' => $history
-            ], 200);
+                'error' => 'Customer is in the database already'
+            ], 422);
         } else {
             $customer = Customer::create([
                 'user_id' => $user_id,
                 'customerName' => $customerName,
                 'phoneNum' => $phoneNum,
                 'address' => $address,
-                'kiloOfBeans' => $kiloOfBeans,
+                //'kiloOfBeans' => $kiloOfBeans,
                 'date' => now()
             ]);
             
