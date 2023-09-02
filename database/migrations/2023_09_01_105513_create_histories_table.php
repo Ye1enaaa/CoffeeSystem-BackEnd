@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id');
-            $table->string('customerName');
+            $table->string('sorterName');
             $table->string('kiloOfBeans');
             $table->string('date');
             $table->timestamps();
