@@ -11,7 +11,7 @@ class History extends Model
 
     protected $fillable = [
         'customer_id',
-        'customerName',
+        'sorterName',
         'kiloOfBeans',
         'date'
     ];

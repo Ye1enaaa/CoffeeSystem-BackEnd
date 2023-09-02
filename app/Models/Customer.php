@@ -12,7 +12,7 @@ class Customer extends Model
         'user_id',
         'customerName',
         'phoneNum',
-        'kiloOfBeans',
+        //'kiloOfBeans',
         'address',
         'date'
     ];
