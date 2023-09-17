@@ -50,4 +50,8 @@ class User extends Authenticatable
     public function sorter(){
         return $this->hasMany(Sorter::class, 'user_id');
     }
+
+    public function details(){
+        return $this->hasMany(Details::class, 'user_id');
+    }
 }
