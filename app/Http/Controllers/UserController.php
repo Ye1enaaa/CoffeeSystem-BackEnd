@@ -10,9 +10,10 @@ class UserController extends Controller
 {
     public function user(){
         $user = Auth::user();
-
+        $details = $user->details;
         return response()->json([
-            'user' => $user
+            'user' => $user,
+            'details' => $details
         ]);
     }
 
