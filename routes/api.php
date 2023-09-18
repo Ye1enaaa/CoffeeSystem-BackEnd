@@ -11,12 +11,13 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\Auth\LogoutController;
 Route::post('/login' , [LoginController::class,'login']);
 Route::post('/register/users', [RegisterController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
-
+    Route::post('/logout' , [LogoutController::class, 'logOut']);
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
     Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
 
@@ -36,6 +37,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/add-customer/{user_id}' , [CustomerController::class, 'getCustomerPostHistory']);
 
     Route::get('/fetch-history/{user_id}/{id}' , [HistoryController::class, 'fetchHistoryOfCustomer']);
+
+    
 });
 
 Route::get('/companies', [UserController::class, 'getCompaniesInfo']);

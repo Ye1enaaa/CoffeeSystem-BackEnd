@@ -22,9 +22,12 @@ class RegisterController extends Controller
                 'email' => $validate['email'],
                 'password' => bcrypt($validate['password'])
             ]);
-            
+
+            $token = $userCreds->createToken('token')->plainTextToken;
+
             return response() -> json([
                 'user' => $userCreds,
+                'token' => $token,
                 'status' => 'OK'
             ], 200);
         } catch (ValidationException $e){
