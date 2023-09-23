@@ -51,4 +51,14 @@ class DetailsController extends Controller
             'details' => $detailsOfUser
         ], 200);
     }
+
+    public function fetchDetails($user_id){
+        $detailsOfUser = Details::where('user_id', $user_id)->first();
+        if (!$detailsOfUser) {
+            return response()->json(['message' => 'Company details not found'], 404);
+        }
+        return response() -> json([
+            'details' => $detailsOfUser
+        ]);
+    }
 }
