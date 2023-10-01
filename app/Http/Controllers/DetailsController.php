@@ -11,13 +11,24 @@ class DetailsController extends Controller
     {
         $user_id = $request->input('user_id');
         $profileAvatar = $request->input('profileAvatar');
+        $images = $request->file('images');
         $companyName = $request->input('companyName');
         $companyNumber = $request->input('companyNumber');
         $companyLocation = $request->input('companyLocation');
         
+        $imagePath = null;
+        if ($images) {
+            if ($images->isValid()) {
+                $imagePath = $images->store('details', 'public');
+            } else {
+                return response()->json(['error' => 'Invalid image file.'], 400);
+            }
+        }
+
         $detailsOfUser = Details::create([
             'user_id' => $user_id,
             'profileAvatar' => $profileAvatar,
+            'images' => $imagePath,
             'companyName' => $companyName,
             'companyNumber' => $companyNumber,
             'companyLocation' => $companyLocation
