@@ -8,38 +8,43 @@ use App\Models\User;
 class DetailsController extends Controller
 {
     public function postDetails(Request $request)
-    {
-        $user_id = $request->input('user_id');
-        $profileAvatar = $request->input('profileAvatar');
-        $images = $request->file('images');
-        $companyName = $request->input('companyName');
-        $companyNumber = $request->input('companyNumber');
-        $companyLocation = $request->input('companyLocation');
-        
-        $imagePath = null;
-        if ($images) {
-            if ($images->isValid()) {
-                $imagePath = $images->store('details', 'public');
+{
+    $user_id = $request->input('user_id');
+    $profileAvatar = $request->input('profileAvatar');
+    $images = $request->file('images');
+    $companyName = $request->input('companyName');
+    $companyNumber = $request->input('companyNumber');
+    $companyLocation = $request->input('companyLocation');
+
+    $imagePaths = []; // Array to store image paths
+
+    if ($images) {
+        foreach ($images as $image) {
+            if ($image->isValid()) {
+                $imagePath = $image->store('details', 'public');
+                $imagePaths[] = $imagePath;
             } else {
                 return response()->json(['error' => 'Invalid image file.'], 400);
             }
         }
-
-        $detailsOfUser = Details::create([
-            'user_id' => $user_id,
-            'profileAvatar' => $profileAvatar,
-            'images' => $imagePath,
-            'companyName' => $companyName,
-            'companyNumber' => $companyNumber,
-            'companyLocation' => $companyLocation
-        ]);
-
-        return response()->json([
-            'status' => 'OK',
-            'details' => $detailsOfUser
-        ], 200);
     }
-    
+
+    $detailsOfUser = Details::create([
+        'user_id' => $user_id,
+        'profileAvatar' => $profileAvatar,
+        'images' => json_encode($imagePaths), // Store image paths as JSON array
+        'companyName' => $companyName,
+        'companyNumber' => $companyNumber,
+        'companyLocation' => $companyLocation
+    ]);
+
+    return response()->json([
+        'status' => 'OK',
+        'details' => $detailsOfUser
+    ], 200);
+}
+
+        
     public function editDetails(Request $request, $id)
     {
         $detailsOfUser = Details::find($id);
