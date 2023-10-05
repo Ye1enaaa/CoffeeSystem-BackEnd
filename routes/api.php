@@ -45,3 +45,4 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
 Route::get('/companies', [UserController::class, 'getCompaniesInfo']);
 Route::get('/count', [BeanCounterController::class, 'fetchBeanCount']);
+Route::post('/post-count', [BeanCounterController::class, 'postBeanCount']);

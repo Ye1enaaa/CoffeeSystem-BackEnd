@@ -26,7 +26,7 @@ class UserController extends Controller
 
 
     public function getCompaniesInfo(){
-        $companies = User::with('customer')->get();
+        $companies = User::with('details')->get();
         return response() -> json([
             'companies' => $companies
         ]);
