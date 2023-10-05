@@ -17,6 +17,7 @@ Route::post('/register/users', [RegisterController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
+    Route::get('/allusers', [UserController::class, 'fetchUsers']);
     Route::post('/logout' , [LogoutController::class, 'logOut']);
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
     Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
