@@ -48,13 +48,13 @@ class DetailsController extends Controller
     public function editDetails(Request $request, $id)
     {
         $detailsOfUser = Details::find($id);
-        
+        $user_id = $request->input('user_id');
         $profileAvatar = $request->input('profileAvatar');
         $companyName = $request->input('companyName');
         $companyNumber = $request->input('companyNumber');
         $companyLocation = $request->input('companyLocation');
 
-        $detailsOfUser->user_id = 1;
+        $detailsOfUser->user_id = $user_id;
         $detailsOfUser -> profileAvatar = $profileAvatar;
         $detailsOfUser -> companyName = $companyName;
         $detailsOfUser -> companyNumber = $companyNumber;
