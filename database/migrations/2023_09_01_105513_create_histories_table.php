@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->string('sorterName');
             $table->string('kiloOfBeans');
+            $table->string('status');
             $table->string('date');
             $table->timestamps();
             $table->foreign('customer_id')

@@ -25,6 +25,7 @@ class StatusController extends Controller
                 'customer_id' => $existingCustomer->id,
                 'sorterName' => $sorterName,
                 'kiloOfBeans' => $kiloOfBeans,
+                'status' => $status,
                 'date' => now()
             ]);
 

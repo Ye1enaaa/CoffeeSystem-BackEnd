@@ -13,6 +13,7 @@ class History extends Model
         'customer_id',
         'sorterName',
         'kiloOfBeans',
+        'status',
         'date'
     ];
 

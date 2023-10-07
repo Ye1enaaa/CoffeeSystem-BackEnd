@@ -17,7 +17,7 @@ class UserController extends Controller
         ]);
     }
     public function fetchUsers(){
-        // $user_id = 1;
+        $role = 1;
         $user = User::all();
         return response() -> json([
             'user' => $user
@@ -26,7 +26,7 @@ class UserController extends Controller
 
 
     public function getCompaniesInfo(){
-        $companies = User::with('details')->get();
+        $companies = User::with('customer')->get();
         return response() -> json([
             'companies' => $companies
         ]);
