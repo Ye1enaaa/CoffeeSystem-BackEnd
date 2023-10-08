@@ -45,28 +45,35 @@ class DetailsController extends Controller
 }
 
         
-    public function editDetails(Request $request, $id)
-    {
-        $detailsOfUser = Details::find($id);
-        $user_id = $request->input('user_id');
-        $profileAvatar = $request->input('profileAvatar');
-        $companyName = $request->input('companyName');
-        $companyNumber = $request->input('companyNumber');
-        $companyLocation = $request->input('companyLocation');
+public function editDetails(Request $request, $user_id)
+{
 
-        $detailsOfUser->user_id = $user_id;
-        $detailsOfUser -> profileAvatar = $profileAvatar;
-        $detailsOfUser -> companyName = $companyName;
-        $detailsOfUser -> companyNumber = $companyNumber;
-        $detailsOfUser -> companyLocation = $companyLocation;
+    // Find the user details by user_id
+    $detailsOfUser = Details::where('user_id', $user_id)->first();
 
-        $detailsOfUser->save();
+    // Validate the request data for the fields you want to update
+    // $request->validate([
+    //     'companyName' => 'required|string|max:255',
+    //     'companyNumber' => 'required|string',
+    //     'companyLocation' => 'required|string|max:255',
+    // ]);
 
-        return response() -> json([
-            'status' => 'OK',
-            'details' => $detailsOfUser
-        ], 200);
-    }
+    // Retrieve the values from the request
+    $companyName = $request->input('companyName');
+    $companyNumber = $request->input('companyNumber');
+    $companyLocation = $request->input('companyLocation');
+
+    // Update the user details
+    $detailsOfUser->update($request->all());
+
+
+    return response()->json([
+        'status' => 'OK',
+        'details' => $detailsOfUser
+    ], 200);
+}
+
+
 
     public function fetchDetails($user_id){
         $detailsOfUser = Details::where('user_id', $user_id)->first();

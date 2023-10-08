@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::delete('/delete-customer/{id}', [CustomerController::class, 'deleteCustomer']);
 
     Route::post('/add-info', [DetailsController::class, 'postDetails']);
-    Route::patch('/edit-info/{id}', [DetailsController::class, 'editDetails']);
+    Route::patch('/edit-info/{user_id}', [DetailsController::class, 'editDetails']);
     Route::get('/fetch-info/{user_id}', [DetailsController::class, 'fetchDetails']);
 
     Route::post('/add-status', [StatusController::class, 'postStatus']);
