@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     //Route::post('/add/customer', [CustomerController::class, 'addCustomer']);
     Route::post('/add/sorter', [SorterController::class, 'addSorter']);
+    Route::patch('/edit/sorter/{id}', [SorterController::class, 'editSorter']);
 
     Route::patch('/edit-customer/{id}', [CustomerController::class, 'editCustomer']);
 
