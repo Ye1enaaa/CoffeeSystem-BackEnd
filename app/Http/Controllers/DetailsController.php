@@ -59,9 +59,9 @@ public function editDetails(Request $request, $user_id)
     // ]);
 
     // Retrieve the values from the request
-    $companyName = $request->input('companyName');
-    $companyNumber = $request->input('companyNumber');
-    $companyLocation = $request->input('companyLocation');
+    // $companyName = $request->input('companyName');
+    // $companyNumber = $request->input('companyNumber');
+    // $companyLocation = $request->input('companyLocation');
 
     // Update the user details
     $detailsOfUser->update($request->all());
