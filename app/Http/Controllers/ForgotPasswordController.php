@@ -18,8 +18,11 @@ class ForgotPasswordController extends Controller
         
         $email = $request->input('email'); 
         Mail::to($email)->send(new SendOTPMail($otp));
+        $uID = User::where('email', $email)->first();
         $encryptedOtp = bcrypt($otp);
         return response()->json([
+            'uID' => $uID->id,
+            'email' => $email,
             'otp' => $encryptedOtp
         ]);
     }
