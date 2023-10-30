@@ -16,9 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('profileAvatar')->nullable();
             $table->string('images')->nullable();
-            $table->string('companyName')->nullable();
-            $table->string('companyNumber')->nullable();
-            $table->string('companyLocation')->nullable();
+            $table->string('companyName');
+            $table->string('companyNumber');
+            $table->string('companyLocation');
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');

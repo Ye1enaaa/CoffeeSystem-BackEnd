@@ -96,17 +96,11 @@ class CustomerController extends Controller
     //update
     public function editCustomer(Request $request, $id)
     {
-        $customer = Customer::findOrFail($id);
+        $customer = Customer::where('id', $id)->first();
         
         try {
-            $validatedData = $request->validate([
-                'customerName' => 'nullable',
-                'phoneNum' => 'nullable',
-                'address' => 'nullable'
-            ]);
-            
-            $customer->fill($validatedData);
-            $customer->save();
+            // Update the user details
+            $customer->update($request->all());
             return response()->json([
                 'status' => 'Customer updated successfully',
                 'customer' => $customer
