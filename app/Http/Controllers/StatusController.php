@@ -63,4 +63,13 @@ class StatusController extends Controller
             'status' => $status
         ], 200);
     }
+
+    public function fetchStatusByCustomer($id, $user_id){
+        $status = Status::where('user_id', $user_id)->get();
+        $statusByCustomer = $status->find($id);
+
+        return response()->json([
+            'customerStatus' => $statusByCustomer
+        ], 200);
+    }
 }
