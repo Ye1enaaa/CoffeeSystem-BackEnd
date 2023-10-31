@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\History;
+use App\Models\Archived; 
 use Carbon\Carbon;
 class CustomerController extends Controller
 {
@@ -110,6 +111,35 @@ class CustomerController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    public function archiveCustomer(Request $request, $id)
+    {
+        $customer = Customer::find($id);
+
+        if (!$customer) {
+            return response()->json([
+                'error' => 'Customer not found',
+            ], 404);
+        }
+
+        // Archive the customer by moving them to the archived table.
+        $archivedCustomer = new Archived($customer->toArray());
+        $archivedCustomer->save();
+
+        // Delete the customer from the original table.
+        $customer->delete();
+
+        return response()->json([
+            'status' => 'Customer archived successfully',
+        ]);
+    }
+
+    public function fetchArchiveds($user_id){
+        $archivedCustomer = Archived::where('user_id', $user_id)->get();
+        return response() -> json([
+            'archiveds' => $archivedCustomer
+        ]);
     }
 
     //delete
