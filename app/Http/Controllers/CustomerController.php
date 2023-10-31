@@ -144,11 +144,12 @@ class CustomerController extends Controller
 
     //delete
     public function deleteCustomer($id){
-        $customer = Customer::findOrFail($id);
-        $deleted = $customer->delete();
+        $archivedCustomer = Archived::findOrFail($id);
+        $deleted = $archivedCustomer->delete();
         return response() -> json([
             'deleted' => $deleted,
-            'status' => 'Deleted'
+            'status' => 'Deleted',
+            'archiveds' => $archivedCustomer
         ], 200);
     }
 }
