@@ -14,8 +14,10 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Auth\LogoutController;
+
 Route::post('/login' , [LoginController::class,'login']);
 Route::post('/register/users', [RegisterController::class, 'register']);
+Route::post('/forget-password' , [ForgotPasswordController::class, 'forgetPassword']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
