@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/add-info', [DetailsController::class, 'postDetails']);
     Route::patch('/edit-info/{user_id}', [DetailsController::class, 'editDetails']);
     Route::get('/fetch-info/{user_id}', [DetailsController::class, 'fetchDetails']);
+    Route::get('/customer-receipt/{id}/{user_id}' , [StatusController::class, 'fetchStatusByCustomer']);
 
     Route::post('/add-status', [StatusController::class, 'postStatus']);
     Route::get('/fetch-status/{user_id}' , [StatusController::class, 'fetchStatus']);
