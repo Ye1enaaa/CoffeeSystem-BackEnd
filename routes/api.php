@@ -31,7 +31,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::patch('/edit/sorter/{id}', [SorterController::class, 'editSorter']);
 
     Route::patch('/edit-customer/{id}', [CustomerController::class, 'editCustomer']);
-
+    Route::patch('/archive-customer/{id}', [CustomerController::class, 'archiveCustomer']);
+    Route::get('/fetch-archive/{id}', [CustomerController::class, 'fetchArchiveds']);
     Route::delete('/delete-customer/{id}', [CustomerController::class, 'deleteCustomer']);
 
     Route::post('/add-info', [DetailsController::class, 'postDetails']);
