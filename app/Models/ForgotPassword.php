@@ -9,6 +9,4 @@ class ForgotPassword extends Model
 {
     use HasFactory;
 
-    public $table = 'password_reset_token';
-    public $timestamps = false;
 }
