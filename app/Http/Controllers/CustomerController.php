@@ -127,30 +127,40 @@ class CustomerController extends Controller
 
         // Archive the customer by moving them to the archived table.
         $archivedCustomer = new Archived($customer->toArray());
+        $archivedCustomer->customer_id = $id;
         $archivedCustomer->save();
 
         $customerInfo = $customer->customerName;
         $customerStatus = Status::where('customerName', $customerInfo)->first();
+        $customerStatuses = Status::where('customer_id', $customerStatus->customer_id)->get();
 
-        if ($customerStatus) {
-            // Create an ArchivedStatusHistory record that includes the customerId.
-            $archived_status_histories = new ArchivedStatusHistory([
-                'customer_id' => $id,
-                'user_id' => $customerStatus->user_id,
-                'customerName' => $customerStatus->customerName,
-                'sorterName' => $customerStatus->sorterName,
-                'kiloOfBeans' => $customerStatus->kiloOfBeans,
-                'status' => $customerStatus->status,
-            ]);
-            $archived_status_histories->save();
+        // Save each status record to archived_status_histories
+        $archivedStatusHistories = [];  // Create an array to store archived status
+        foreach ($customerStatuses as $status) {
+            $archived_status = new ArchivedStatusHistory($status->toArray());
+            $archived_status->customer_id = $archivedCustomer->customer_id;
+            $archived_status->status_id = $status->id;
+
+            $archivedStatusHistories[] = $archived_status;  // Add each archived status to the array
+            $status->delete(); 
         }
 
-        $customer->delete();
-        $customerStatus->delete();
+        // Convert the array of objects into an array of associative arrays
+        $recordsToInsert = [];
+        foreach ($archivedStatusHistories as $archived_status) {
+            $recordsToInsert[] = $archived_status->toArray();
+        }
 
+        // Now, save all the archived status histories in one go
+        ArchivedStatusHistory::insert($recordsToInsert);
+        // $customerStatuses->delete(); 
+        $customer->delete();
+        
         return response()->json([
             'status' => 'Customer and associated histories archived successfully',
-            'archived_status_histories' => $archived_status_histories
+            'archivedCustomer' => $archivedCustomer,
+            'customerStatuses' => $customerStatuses,
+            'archived_status' => $recordsToInsert
         ]);
     }
 
