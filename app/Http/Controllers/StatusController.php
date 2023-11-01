@@ -31,6 +31,7 @@ class StatusController extends Controller
             ]);
 
             $stats = Status::create([
+                'customer_id' => $existingCustomer->id,
                 'user_id' => $user_id,
                 'customerName' => $customerName,
                 'sorterName' => $sorterName,
