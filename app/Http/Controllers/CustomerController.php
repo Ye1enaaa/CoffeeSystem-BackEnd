@@ -163,13 +163,20 @@ class CustomerController extends Controller
             'archived_status' => $recordsToInsert
         ]);
     }
-
+    
 
 
     public function fetchArchiveds($user_id){
         $archivedCustomer = Archived::where('user_id', $user_id)->get();
         return response() -> json([
             'archiveds' => $archivedCustomer
+        ]);
+    }
+
+    public function fetchStatusArchive($user_id){
+        $archived_status = ArchivedStatusHistory::where('user_id', $user_id)->get();
+        return response() -> json([
+            'archived_status' => $archived_status
         ]);
     }
 
@@ -181,6 +188,17 @@ class CustomerController extends Controller
             'deleted' => $deleted,
             'status' => 'Deleted',
             'archiveds' => $archivedCustomer
+        ], 200);
+    }
+
+    //delete
+    public function deleteStatus($id){
+        $archived_status = ArchivedStatusHistory::findOrFail($id);
+        $deleted = $archived_status->delete();
+        return response() -> json([
+            'deleted' => $deleted,
+            'status' => 'Deleted',
+            'archiveds' => $archived_status
         ], 200);
     }
 }
