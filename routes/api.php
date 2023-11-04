@@ -58,4 +58,4 @@ Route::post('/post-count', [BeanCounterController::class, 'postBeanCount']);
 Route::put('/user-edit/{id}', [ForgotPasswordController::class, 'passwrdEdit']);
 Route::post('/verify-otp' , [ForgotPasswordController::class, 'verifyOTP']);
 Route::post('/post-feedback', [FeedbackController::class, 'postFeedback']);
-Route::get('/fetch-feedback', [FeedbackController::class, 'fetchFeedback']);
+Route::get('/fetch-feedback/{user_id}', [FeedbackController::class, 'fetchFeedback']);

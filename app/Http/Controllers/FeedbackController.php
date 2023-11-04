@@ -43,8 +43,9 @@ class FeedbackController extends Controller
         return response()->json(['message' => 'Feedback submitted successfully'], 201);
     }
 
-    public function fetchFeedback()
+    public function fetchFeedback($user_id)
     {
+        $user_id = 1;
         $feedback = Feedback::all();
 
         return response()->json(['data' => $feedback], 200);
