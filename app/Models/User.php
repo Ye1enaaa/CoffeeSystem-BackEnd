@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Customer;
+use App\Models\ArchivedStatusHistory;
+use App\Models\Sorter;
+use App\Models\Details;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -54,5 +57,9 @@ class User extends Authenticatable
 
     public function details(){
         return $this->hasMany(Details::class, 'user_id');
+    }
+
+    public function archiveID(){
+        return $this->hasMany(ArchivedStatusHistory::class, 'user_id');
     }
 }

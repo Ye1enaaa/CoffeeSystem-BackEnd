@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\History;
-use App\Models\Archived; 
+use App\Models\Archived;
+use App\Models\Status;
+use App\Models\ArchivedStatusHistory;
 use Carbon\Carbon;
 class CustomerController extends Controller
 {
@@ -125,20 +127,56 @@ class CustomerController extends Controller
 
         // Archive the customer by moving them to the archived table.
         $archivedCustomer = new Archived($customer->toArray());
+        $archivedCustomer->customer_id = $id;
         $archivedCustomer->save();
 
-        // Delete the customer from the original table.
-        $customer->delete();
+        $customerInfo = $customer->customerName;
+        $customerStatus = Status::where('customerName', $customerInfo)->first();
+        $customerStatuses = Status::where('customer_id', $customerStatus->customer_id)->get();
 
+        // Save each status record to archived_status_histories
+        $archivedStatusHistories = [];  // Create an array to store archived status
+        foreach ($customerStatuses as $status) {
+            $archived_status = new ArchivedStatusHistory($status->toArray());
+            $archived_status->customer_id = $archivedCustomer->customer_id;
+            $archived_status->status_id = $status->id;
+
+            $archivedStatusHistories[] = $archived_status;  // Add each archived status to the array
+            $status->delete(); 
+        }
+
+        // Convert the array of objects into an array of associative arrays
+        $recordsToInsert = [];
+        foreach ($archivedStatusHistories as $archived_status) {
+            $recordsToInsert[] = $archived_status->toArray();
+        }
+
+        // Now, save all the archived status histories in one go
+        ArchivedStatusHistory::insert($recordsToInsert);
+        // $customerStatuses->delete(); 
+        $customer->delete();
+        
         return response()->json([
-            'status' => 'Customer archived successfully',
+            'status' => 'Customer and associated histories archived successfully',
+            'archivedCustomer' => $archivedCustomer,
+            'customerStatuses' => $customerStatuses,
+            'archived_status' => $recordsToInsert
         ]);
     }
+    
+
 
     public function fetchArchiveds($user_id){
         $archivedCustomer = Archived::where('user_id', $user_id)->get();
         return response() -> json([
             'archiveds' => $archivedCustomer
+        ]);
+    }
+
+    public function fetchStatusArchive($user_id){
+        $archived_status = ArchivedStatusHistory::where('user_id', $user_id)->get();
+        return response() -> json([
+            'archived_status' => $archived_status
         ]);
     }
 
@@ -150,6 +188,17 @@ class CustomerController extends Controller
             'deleted' => $deleted,
             'status' => 'Deleted',
             'archiveds' => $archivedCustomer
+        ], 200);
+    }
+
+    //delete
+    public function deleteStatus($id){
+        $archived_status = ArchivedStatusHistory::findOrFail($id);
+        $deleted = $archived_status->delete();
+        return response() -> json([
+            'deleted' => $deleted,
+            'status' => 'Deleted',
+            'archiveds' => $archived_status
         ], 200);
     }
 }
