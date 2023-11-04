@@ -17,8 +17,8 @@ class UserController extends Controller
         ]);
     }
     public function fetchUsers(){
-        $role = 1;
-        $user = User::all();
+        $role = 2;
+        $user = User::where('role',$role)->get();
         return response() -> json([
             'user' => $user
         ]);
