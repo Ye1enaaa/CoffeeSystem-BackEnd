@@ -44,7 +44,7 @@ class DetailsController extends Controller
 
     $detailsOfUser = Details::create([
         'user_id' => $user_id,
-        'profileAvatar' => json_encode($profileAvatar),
+        'profileAvatar' => json_encode($profilePaths),
         'images' => json_encode($imagePaths), // Store image paths as JSON array
         'companyName' => $companyName,
         'companyNumber' => $companyNumber,
