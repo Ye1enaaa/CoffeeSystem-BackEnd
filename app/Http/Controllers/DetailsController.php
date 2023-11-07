@@ -10,7 +10,7 @@ class DetailsController extends Controller
     public function postDetails(Request $request)
 {
     $user_id = $request->input('user_id');
-    $profileAvatar = $request->input('profileAvatar');
+    $profileAvatar = $request->file('profileAvatar');
     $images = $request->file('images');
     $companyName = $request->input('companyName');
     $companyNumber = $request->input('companyNumber');
@@ -29,9 +29,22 @@ class DetailsController extends Controller
         }
     }
 
+    $profilePaths = []; // Array to store image paths
+
+    if ($profileAvatar) {
+        foreach ($profileAvatar as $profileImage) {
+            if ($profileImage->isValid()) {
+                $profilePath = $profileImage->store('details', 'public');
+                $profilePaths[] = $profilePath;
+            } else {
+                return response()->json(['error' => 'Invalid image file.'], 400);
+            }
+        }
+    }
+
     $detailsOfUser = Details::create([
         'user_id' => $user_id,
-        'profileAvatar' => $profileAvatar,
+        'profileAvatar' => json_encode($profileAvatar),
         'images' => json_encode($imagePaths), // Store image paths as JSON array
         'companyName' => $companyName,
         'companyNumber' => $companyNumber,
