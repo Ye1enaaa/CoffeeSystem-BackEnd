@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('histories', function (Blueprint $table) {
+        Schema::create('statuses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('customerName');
             $table->string('sorterName');
             $table->string('kiloOfBeans');
             $table->string('status');
-            $table->string('date');
             $table->timestamps();
             $table->foreign('customer_id')
                 ->references('id')->on('customers')
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('histories');
+        Schema::dropIfExists('statuses');
     }
 };

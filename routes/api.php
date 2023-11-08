@@ -22,6 +22,9 @@ Route::post('/forget-password' , [ForgotPasswordController::class, 'forgetPasswo
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
     Route::get('/allusers', [UserController::class, 'fetchUsers']);
+    Route::post('/generate-keys', [UserController::class, 'generateRandomKey']);
+    Route::get('/fetch-keys/{user_id}', [UserController::class, 'fetchRandomKey']);
+    Route::delete('/delete-key/{id}', [UserController::class, 'deleteKey']);
     Route::post('/logout' , [LogoutController::class, 'logOut']);
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
     Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
@@ -33,6 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::patch('/edit-customer/{id}', [CustomerController::class, 'editCustomer']);
     Route::patch('/archive-customer/{id}', [CustomerController::class, 'archiveCustomer']);
     Route::get('/fetch-archive/{id}', [CustomerController::class, 'fetchArchiveds']);
+    Route::get('/fetch-archive-status/{id}', [CustomerController::class, 'fetchStatusArchive']);
+    Route::delete('/delete-archive-status/{id}', [CustomerController::class, 'deleteStatus']);
     Route::delete('/delete-customer/{id}', [CustomerController::class, 'deleteCustomer']);
 
     Route::post('/add-info', [DetailsController::class, 'postDetails']);
@@ -42,10 +47,12 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::post('/add-status', [StatusController::class, 'postStatus']);
     Route::get('/fetch-status/{user_id}' , [StatusController::class, 'fetchStatus']);
+    Route::patch('/update-status/{id}', [StatusController::class, 'updateStatus']);
 
     Route::post('/add-customer/{user_id}' , [CustomerController::class, 'getCustomerPostHistory']);
 
     Route::get('/fetch-history/{user_id}/{id}' , [HistoryController::class, 'fetchHistoryOfCustomer']);
+    Route::get('/fetch-histories/{user_id}' , [HistoryController::class, 'fetchHistory']);
 
     
 });
@@ -56,4 +63,4 @@ Route::post('/post-count', [BeanCounterController::class, 'postBeanCount']);
 Route::put('/user-edit/{id}', [ForgotPasswordController::class, 'passwrdEdit']);
 Route::post('/verify-otp' , [ForgotPasswordController::class, 'verifyOTP']);
 Route::post('/post-feedback', [FeedbackController::class, 'postFeedback']);
-Route::get('/fetch-feedback', [FeedbackController::class, 'fetchFeedback']);
+Route::get('/fetch-feedback/{user_id}', [FeedbackController::class, 'fetchFeedback']);

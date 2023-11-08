@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('archiveds', function (Blueprint $table) {
+        Schema::create('archived_status_histories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('status_id');
             $table->unsignedBigInteger('user_id');
             $table->string('customerName');
-            $table->string('phoneNum');
-            $table->string('address');
-            $table->string('date');
+            $table->string('sorterName');
+            $table->string('kiloOfBeans');
+            $table->string('status');
             $table->timestamps();
+            $table->foreign('customer_id')
+                ->references('id')->on('archiveds')
+                ->onDelete('cascade')->onUpdate('cascade');    
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
@@ -30,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('archiveds');
+        Schema::dropIfExists('archived_status_histories');
     }
 };

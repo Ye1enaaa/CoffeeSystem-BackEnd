@@ -23,7 +23,9 @@ class StatusController extends Controller
 
         if($existingCustomer){
             $history = History::create([
+                'user_id' => $user_id,
                 'customer_id' => $existingCustomer->id,
+                'customerName' => $existingCustomer->customerName,
                 'sorterName' => $sorterName,
                 'kiloOfBeans' => $kiloOfBeans,
                 'status' => $status,
@@ -31,6 +33,7 @@ class StatusController extends Controller
             ]);
 
             $stats = Status::create([
+                'customer_id' => $existingCustomer->id,
                 'user_id' => $user_id,
                 'customerName' => $customerName,
                 'sorterName' => $sorterName,
@@ -88,6 +91,17 @@ class StatusController extends Controller
                 'subTotal' => $roundedSubTotal,
                 'vat' => $roundedVat
             ]
+        ], 200);
+    }
+
+    //update
+    public function updateStatus(Request $request, $id)
+    {
+        $status = Status::where('id', $id)->first();
+        // Update the user details
+        $status->update($request->all());
+        return response() -> json([
+            'status' => $status
         ], 200);
     }
 }
