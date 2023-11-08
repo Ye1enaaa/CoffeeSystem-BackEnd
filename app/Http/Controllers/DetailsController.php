@@ -8,83 +8,101 @@ use App\Models\User;
 class DetailsController extends Controller
 {
     public function postDetails(Request $request)
-{
-    $user_id = $request->input('user_id');
-    $profileAvatar = $request->file('profileAvatar');
-    $images = $request->file('images');
-    $companyName = $request->input('companyName');
-    $companyNumber = $request->input('companyNumber');
-    $companyLocation = $request->input('companyLocation');
+    {
+        $user_id = $request->input('user_id');
+        $profileAvatar = $request->file('profileAvatar');
+        $images = $request->file('images');
+        $companyName = $request->input('companyName');
+        $companyNumber = $request->input('companyNumber');
+        $companyLocation = $request->input('companyLocation');
 
-    $imagePaths = []; // Array to store image paths
+        $imagePaths = []; // Array to store image paths
 
-    if ($images) {
-        foreach ($images as $image) {
-            if ($image->isValid()) {
-                $imagePath = $image->store('details', 'public');
-                $imagePaths[] = $imagePath;
-            } else {
-                return response()->json(['error' => 'Invalid image file.'], 400);
+        if ($images) {
+            foreach ($images as $image) {
+                if ($image->isValid()) {
+                    $imagePath = $image->store('details', 'public');
+                    $imagePaths[] = $imagePath;
+                } else {
+                    return response()->json(['error' => 'Invalid image file.'], 400);
+                }
             }
         }
-    }
 
-    $profilePaths = []; // Array to store image paths
+        $profilePaths = []; // Array to store image paths
 
-    if ($profileAvatar) {
-        foreach ($profileAvatar as $profileImage) {
-            if ($profileImage->isValid()) {
-                $profilePath = $profileImage->store('details', 'public');
-                $profilePaths[] = $profilePath;
-            } else {
-                return response()->json(['error' => 'Invalid image file.'], 400);
+        if ($profileAvatar) {
+            foreach ($profileAvatar as $profileImage) {
+                if ($profileImage->isValid()) {
+                    $profilePath = $profileImage->store('details', 'public');
+                    $profilePaths[] = $profilePath;
+                } else {
+                    return response()->json(['error' => 'Invalid image file.'], 400);
+                }
             }
         }
+
+        $detailsOfUser = Details::create([
+            'user_id' => $user_id,
+            'profileAvatar' => json_encode($profilePaths),
+            'images' => json_encode($imagePaths), // Store image paths as JSON array
+            'companyName' => $companyName,
+            'companyNumber' => $companyNumber,
+            'companyLocation' => $companyLocation
+        ]);
+
+        return response()->json([
+            'status' => 'OK',
+            'details' => $detailsOfUser
+        ], 200);
     }
-
-    $detailsOfUser = Details::create([
-        'user_id' => $user_id,
-        'profileAvatar' => json_encode($profilePaths),
-        'images' => json_encode($imagePaths), // Store image paths as JSON array
-        'companyName' => $companyName,
-        'companyNumber' => $companyNumber,
-        'companyLocation' => $companyLocation
-    ]);
-
-    return response()->json([
-        'status' => 'OK',
-        'details' => $detailsOfUser
-    ], 200);
-}
 
         
-public function editDetails(Request $request, $user_id)
-{
+    public function editDetails(Request $request, $user_id)
+    {
+        // Find the user details by user_id
+        $detailsOfUser = Details::where('user_id', $user_id)->first();
 
-    // Find the user details by user_id
-    $detailsOfUser = Details::where('user_id', $user_id)->first();
+        if (!$detailsOfUser) {
+            return response()->json(['error' => 'User details not found.'], 404);
+        }
 
-    // Validate the request data for the fields you want to update
-    // $request->validate([
-    //     'companyName' => 'required|string|max:255',
-    //     'companyNumber' => 'required|string',
-    //     'companyLocation' => 'required|string|max:255',
-    // ]);
+        // Update the user details using the request data
+        $detailsOfUser->update($request->all());
 
-    // Retrieve the values from the request
-    // $companyName = $request->input('companyName');
-    // $companyNumber = $request->input('companyNumber');
-    // $companyLocation = $request->input('companyLocation');
+        // Handle profileAvatar and images separately
+        if ($request->hasFile('profileAvatar')) {
+            $profileAvatar = $request->file('profileAvatar');
+            if ($profileAvatar->isValid()) {
+                $profilePath = $profileAvatar->store('public/details'); // Store with a relative path
+                $detailsOfUser->profileAvatar = json_encode([$profilePath]);
+            } else {
+                return response()->json(['error' => 'Invalid profile image file.'], 400);
+            }
+        }
 
-    // Update the user details
-    $detailsOfUser->update($request->all());
+        if ($request->hasFile('images')) {
+            $imagePaths = [];
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                if ($image->isValid()) {
+                    $imagePath = $image->store('public/details'); // Store with a relative path
+                    $imagePaths[] = $imagePath;
+                } else {
+                    return response()->json(['error' => 'Invalid image file.'], 400);
+                }
+            }
+            $detailsOfUser->images = json_encode($imagePaths);
+        }
 
+        $detailsOfUser->save();
 
-    return response()->json([
-        'status' => 'OK',
-        'details' => $detailsOfUser
-    ], 200);
-}
+        return response()->json([
+            'status' => 'OK',
+            'details' => $detailsOfUser
+        ], 200);
+    }
+
 
 
 
