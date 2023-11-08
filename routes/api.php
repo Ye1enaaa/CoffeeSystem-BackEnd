@@ -47,10 +47,12 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::post('/add-status', [StatusController::class, 'postStatus']);
     Route::get('/fetch-status/{user_id}' , [StatusController::class, 'fetchStatus']);
+    Route::patch('/update-status/{id}', [StatusController::class, 'updateStatus']);
 
     Route::post('/add-customer/{user_id}' , [CustomerController::class, 'getCustomerPostHistory']);
 
     Route::get('/fetch-history/{user_id}/{id}' , [HistoryController::class, 'fetchHistoryOfCustomer']);
+    Route::get('/fetch-histories/{user_id}' , [HistoryController::class, 'fetchHistory']);
 
     
 });

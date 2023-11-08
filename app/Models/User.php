@@ -12,6 +12,7 @@ use App\Models\ArchivedStatusHistory;
 use App\Models\Sorter;
 use App\Models\Details;
 use App\Models\GenerateKeys;
+use App\Models\History;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -65,5 +66,8 @@ class User extends Authenticatable
     }
     public function keys(){
         return $this->belongsTo(GenerateKeys::class, 'user_id');
+    }
+    public function histories(){
+        return $this->belongsTo(History::class, 'user_id');
     }
 }
