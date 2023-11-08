@@ -86,7 +86,7 @@ class DetailsController extends Controller
             $images = $request->file('images');
             foreach ($images as $image) {
                 if ($image->isValid()) {
-                    $imagePath = $image->store('public/details'); // Store with a relative path
+                    $imagePath = $image->store('details', 'public');
                     $imagePaths[] = $imagePath;
                 } else {
                     return response()->json(['error' => 'Invalid image file.'], 400);
