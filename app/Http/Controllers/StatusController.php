@@ -23,7 +23,9 @@ class StatusController extends Controller
 
         if($existingCustomer){
             $history = History::create([
+                'user_id' => $user_id,
                 'customer_id' => $existingCustomer->id,
+                'customerName' => $existingCustomer->customerName,
                 'sorterName' => $sorterName,
                 'kiloOfBeans' => $kiloOfBeans,
                 'status' => $status,

@@ -151,6 +151,7 @@ class CustomerController extends Controller
             $recordsToInsert[] = $archived_status->toArray();
         }
 
+        
         // Now, save all the archived status histories in one go
         ArchivedStatusHistory::insert($recordsToInsert);
         // $customerStatuses->delete(); 

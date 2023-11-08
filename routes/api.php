@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/add-customer/{user_id}' , [CustomerController::class, 'getCustomerPostHistory']);
 
     Route::get('/fetch-history/{user_id}/{id}' , [HistoryController::class, 'fetchHistoryOfCustomer']);
+    Route::get('/fetch-histories/{user_id}' , [HistoryController::class, 'fetchHistory']);
 
     
 });
