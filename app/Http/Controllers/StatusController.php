@@ -93,4 +93,15 @@ class StatusController extends Controller
             ]
         ], 200);
     }
+
+    //update
+    public function updateStatus(Request $request, $id)
+    {
+        $status = Status::where('id', $id)->first();
+        // Update the user details
+        $status->update($request->all());
+        return response() -> json([
+            'status' => $status
+        ], 200);
+    }
 }
