@@ -62,14 +62,11 @@ class DetailsController extends Controller
     {
         // Find the user details by user_id
         $detailsOfUser = Details::where('user_id', $user_id)->first();
-
+    
         if (!$detailsOfUser) {
             return response()->json(['error' => 'User details not found.'], 404);
         }
-
-        // Update the user details using the request data
-        $detailsOfUser->update($request->all());
-
+    
         // Handle profileAvatar and images separately
         if ($request->hasFile('profileAvatar')) {
             $profileAvatar = $request->file('profileAvatar');
@@ -80,7 +77,7 @@ class DetailsController extends Controller
                 return response()->json(['error' => 'Invalid profile image file.'], 400);
             }
         }
-
+    
         if ($request->hasFile('images')) {
             $imagePaths = [];
             $images = $request->file('images');
@@ -94,14 +91,15 @@ class DetailsController extends Controller
             }
             $detailsOfUser->images = json_encode($imagePaths);
         }
-
-        $detailsOfUser->save();
-
+    
+        // Update the user details using the request data after handling profileAvatar and images
+        $detailsOfUser->update($request->all());
         return response()->json([
             'status' => 'OK',
             'details' => $detailsOfUser
         ], 200);
     }
+    
 
 
 
