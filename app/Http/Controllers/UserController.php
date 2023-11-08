@@ -27,6 +27,17 @@ class UserController extends Controller
         ]);
     }
 
+    //update
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::where('id', $id)->first();
+        // Update the user details
+        $user->update($request->all());
+        return response() -> json([
+            'user' => $user
+        ], 200);
+    }
+
     public function getCompaniesInfo(){
         $companies = User::with('details')
                          ->where('role', 2)
