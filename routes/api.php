@@ -22,6 +22,9 @@ Route::post('/forget-password' , [ForgotPasswordController::class, 'forgetPasswo
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
     Route::get('/allusers', [UserController::class, 'fetchUsers']);
+    Route::post('/generate-keys', [UserController::class, 'generateRandomKey']);
+    Route::get('/fetch-keys/{user_id}', [UserController::class, 'fetchRandomKey']);
+    Route::delete('/delete-key/{id}', [UserController::class, 'deleteKey']);
     Route::post('/logout' , [LogoutController::class, 'logOut']);
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
     Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
@@ -58,4 +61,4 @@ Route::post('/post-count', [BeanCounterController::class, 'postBeanCount']);
 Route::put('/user-edit/{id}', [ForgotPasswordController::class, 'passwrdEdit']);
 Route::post('/verify-otp' , [ForgotPasswordController::class, 'verifyOTP']);
 Route::post('/post-feedback', [FeedbackController::class, 'postFeedback']);
-Route::get('/fetch-feedback', [FeedbackController::class, 'fetchFeedback']);
+Route::get('/fetch-feedback/{user_id}', [FeedbackController::class, 'fetchFeedback']);
