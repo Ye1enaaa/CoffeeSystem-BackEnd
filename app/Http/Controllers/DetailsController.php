@@ -68,30 +68,17 @@ class DetailsController extends Controller
         }
     
         // Handle profileAvatar and images separately
-        if ($request->hasFile('profileAvatar')) {
-            $profileAvatar = $request->file('profileAvatar');
-            if ($profileAvatar->isValid()) {
-                $profilePath = $profileAvatar->store('public/details'); // Store with a relative path
-                $detailsOfUser->profileAvatar = json_encode([$profilePath]);
+        if ($request->hasFile('images')) {
+            $imagePath = []; // Array to store image paths
+            $images = $request->file('images');
+            if ($images->isValid()) {
+                $imagePath = $images->store('details', 'public');
+                $imagePaths[] = $imagePath;
             } else {
                 return response()->json(['error' => 'Invalid profile image file.'], 400);
             }
+            $detailsOfUser->images = json_encode([$imagePaths]);
         }
-    
-        if ($request->hasFile('images')) {
-            $imagePaths = [];
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                if ($image->isValid()) {
-                    $imagePath = $image->store('details', 'public');
-                    $imagePaths[] = $imagePath;
-                } else {
-                    return response()->json(['error' => 'Invalid image file.'], 400);
-                }
-            }
-            $detailsOfUser->images = json_encode($imagePaths);
-        }
-    
         // Update the user details using the request data after handling profileAvatar and images
         $detailsOfUser->update($request->all());
         return response()->json([

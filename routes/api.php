@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get('/fetch-history/{user_id}/{id}' , [HistoryController::class, 'fetchHistoryOfCustomer']);
     Route::get('/fetch-histories/{user_id}' , [HistoryController::class, 'fetchHistory']);
-
+    Route::patch('/update-feedback/{user_id}', [FeedbackController::class, 'updateFeedback']);
     
 });
 Route::post('/reset-password' , [ForgotPasswordController::class, 'sendOTP']);
