@@ -18,9 +18,15 @@ class LoginController extends Controller
 
         $user = User::where('email' , $credentials['email'])->first();
 
+        if (!$user) {
+            return response() ->json([
+                'email' => 'Email Not Found'
+            ], 401);
+        }
+
         if(!$user||!Hash::check($credentials['password'],$user->password)){
             return response() ->json([
-                'error' => 'Invalid Credentials'
+                'password' => 'Invalid Password'
             ], 401);
         }
 
@@ -28,6 +34,7 @@ class LoginController extends Controller
         if(Auth::attempt($credentials)){
             $user = Auth::user();
             return response()->json([
+                'message' => 'Login successful',
                 'user' => $user,
                 'token' => $token
             ], 200);
