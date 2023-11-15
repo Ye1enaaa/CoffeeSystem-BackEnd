@@ -30,6 +30,12 @@ class LoginController extends Controller
             ], 401);
         }
 
+        // Check if the user is disabled
+        if ($user->disabled) {
+            Auth::logout(); // Log the user out
+            return response()->json(['disabled' => 'User is disabled'], 401);
+        }
+
         $token = $user->createToken('token')->plainTextToken;
         if(Auth::attempt($credentials)){
             $user = Auth::user();

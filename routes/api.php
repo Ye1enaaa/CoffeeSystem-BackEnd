@@ -22,6 +22,7 @@ Route::post('/forget-password' , [ForgotPasswordController::class, 'forgetPasswo
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
     Route::patch('/update-user/{id}', [UserController::class, 'updateUser']);
+    Route::patch('/disabled-user/{id}', [UserController::class, 'disabledUser']);
     Route::get('/allusers', [UserController::class, 'fetchUsers']);
     Route::post('/generate-keys', [UserController::class, 'generateRandomKey']);
     Route::get('/fetch-keys/{user_id}', [UserController::class, 'fetchRandomKey']);
