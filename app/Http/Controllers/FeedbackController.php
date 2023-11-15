@@ -50,4 +50,20 @@ class FeedbackController extends Controller
 
         return response()->json(['data' => $feedback], 200);
     }
+
+    public function updateFeedback(Request $request, $id)
+    {
+        // Find the feedback entry by id
+        $feedback = Feedback::find($id);
+
+        if (!$feedback) {
+            return response()->json(['error' => 'Feedback not found'], 404);
+        }
+
+        // Update the status
+        $feedback->update(['status' => $request->input('status')]);
+
+        // You can return a response or redirect as needed
+        return response()->json(['data' => $feedback], 200);
+    }
 }

@@ -27,6 +27,53 @@ class UserController extends Controller
         ]);
     }
 
+    //update
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::where('id', $id)->first();
+        // Update the user details
+        $user->update($request->all());
+        return response() -> json([
+            'user' => $user
+        ], 200);
+    }
+
+    public function disabledUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check if 'disabled' is present in the request
+        if ($request->has('disabled')) {
+            // Disable the user
+            $user->disabled = $request->boolean('disabled');
+            $user->save();
+
+            // Check if the user is disabled and return an error response
+            // if ($user->disabled) {
+            //     return response()->json(['error' => 'User is disabled'], 404);
+            // }
+        }
+
+        // Update other user details if needed
+        $user->update($request->except('disabled'));
+
+        // Return success response
+        return response()->json(['user' => $user], 200);
+    }
+
+     //delete
+     public function deleteUser($id){
+        $user = User::findOrFail($id);
+        $deleted = $user->delete();
+        return response() -> json([
+            'deleted' => $deleted,
+            'user' => $user,
+            'status' => 'Deleted',
+        ], 200);
+    }
+
+
+
     public function getCompaniesInfo(){
         $companies = User::with('details')
                          ->where('role', 2)

@@ -16,6 +16,7 @@ class Feedback extends Model
         'website',
         'message',
         'email',
+        'status'
     ];
 
     protected $casts = [

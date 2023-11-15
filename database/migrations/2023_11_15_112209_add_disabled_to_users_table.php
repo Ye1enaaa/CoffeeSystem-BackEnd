@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback', function (Blueprint $table) {
-            $table->string('status');
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('disabled')->default(false);
         });
     }
 
@@ -21,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('feedback');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('disabled');
+        });
     }
 };

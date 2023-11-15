@@ -21,6 +21,9 @@ Route::post('/forget-password' , [ForgotPasswordController::class, 'forgetPasswo
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user', [UserController::class, 'user']);
+    Route::patch('/update-user/{id}', [UserController::class, 'updateUser']);
+    Route::delete('/delete-user/{id}', [UserController::class, 'deleteUser']);
+    Route::patch('/disabled-user/{id}', [UserController::class, 'disabledUser']);
     Route::get('/allusers', [UserController::class, 'fetchUsers']);
     Route::post('/generate-keys', [UserController::class, 'generateRandomKey']);
     Route::get('/fetch-keys/{user_id}', [UserController::class, 'fetchRandomKey']);
@@ -53,7 +56,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get('/fetch-history/{user_id}/{id}' , [HistoryController::class, 'fetchHistoryOfCustomer']);
     Route::get('/fetch-histories/{user_id}' , [HistoryController::class, 'fetchHistory']);
-
+    Route::patch('/update-feedback/{user_id}', [FeedbackController::class, 'updateFeedback']);
     
 });
 Route::post('/reset-password' , [ForgotPasswordController::class, 'sendOTP']);

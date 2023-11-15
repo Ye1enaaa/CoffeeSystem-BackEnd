@@ -18,16 +18,29 @@ class LoginController extends Controller
 
         $user = User::where('email' , $credentials['email'])->first();
 
+        if (!$user) {
+            return response() ->json([
+                'email' => 'Email Not Found'
+            ], 401);
+        }
+
         if(!$user||!Hash::check($credentials['password'],$user->password)){
             return response() ->json([
-                'error' => 'Invalid Credentials'
+                'password' => 'Invalid Password'
             ], 401);
+        }
+
+        // Check if the user is disabled
+        if ($user->disabled) {
+            Auth::logout(); // Log the user out
+            return response()->json(['disabled' => 'User is disabled'], 401);
         }
 
         $token = $user->createToken('token')->plainTextToken;
         if(Auth::attempt($credentials)){
             $user = Auth::user();
             return response()->json([
+                'message' => 'Login successful',
                 'user' => $user,
                 'token' => $token
             ], 200);
