@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Carbon\Carbon;
+
 class LoginController extends Controller
 {
     public function login(Request $request)
@@ -39,6 +41,8 @@ class LoginController extends Controller
         $token = $user->createToken('token')->plainTextToken;
         if(Auth::attempt($credentials)){
             $user = Auth::user();
+            // Update last_login with the current date and time
+            $user->update(['last_login' => Carbon::now()]);
             return response()->json([
                 'message' => 'Login successful',
                 'user' => $user,
