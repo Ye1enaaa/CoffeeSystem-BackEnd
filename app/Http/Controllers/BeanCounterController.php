@@ -16,13 +16,9 @@ class BeanCounterController extends Controller
     }
 
     public function postBeanCount(Request $request){
-        $id = $request->input('id');
-        $good = $request->input('good');
         $bad = $request->input('bad');
 
         $beanData = BeanData::create([
-            //'id' => $id,
-            'good' => $good,
             'bad' => $bad
         ]);
 
