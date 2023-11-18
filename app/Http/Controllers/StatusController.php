@@ -7,6 +7,7 @@ use App\Models\Sorter;
 use App\Models\Status;
 use App\Models\Customer;
 use App\Models\History;
+use App\Models\User;
 class StatusController extends Controller
 {
     public function postStatus(Request $request){
@@ -22,13 +23,17 @@ class StatusController extends Controller
 
         if($existingCustomer){
             $history = History::create([
+                'user_id' => $user_id,
                 'customer_id' => $existingCustomer->id,
+                'customerName' => $existingCustomer->customerName,
                 'sorterName' => $sorterName,
                 'kiloOfBeans' => $kiloOfBeans,
+                'status' => $status,
                 'date' => now()
             ]);
 
             $stats = Status::create([
+                'customer_id' => $existingCustomer->id,
                 'user_id' => $user_id,
                 'customerName' => $customerName,
                 'sorterName' => $sorterName,
@@ -58,6 +63,43 @@ class StatusController extends Controller
 
     public function fetchStatus($user_id){
         $status = Status::where('user_id', $user_id)->get();
+        return response() -> json([
+            'status' => $status
+        ], 200);
+    }
+
+    public function fetchStatusByCustomer($id, $user_id){
+        $status = Status::where('user_id', $user_id)->get();
+        $statusByCustomer = $status->find($id);
+        $customer = $statusByCustomer->customerName;
+        $customerInfo = Customer::where('customerName', $customer)->first();
+        $kilo = $statusByCustomer->kiloOfBeans;
+        $unitPrice = 100;
+        $amount = $unitPrice * $kilo;
+        $subTotal = $amount/1.12;
+        $vat = $subTotal * .12;
+        //$pwdScDiscount
+        $totalAmount =  $amount;
+        $roundedSubTotal = number_format($subTotal, 2);
+        $roundedVat = number_format($vat, 2);
+        return response()->json([
+            'customerStatus' => $statusByCustomer,
+            'customerInfo' => $customerInfo,
+            'total' => [
+                'unitPrice' => $unitPrice,
+                'amount' => $amount,
+                'subTotal' => $roundedSubTotal,
+                'vat' => $roundedVat
+            ]
+        ], 200);
+    }
+
+    //update
+    public function updateStatus(Request $request, $id)
+    {
+        $status = Status::where('id', $id)->first();
+        // Update the user details
+        $status->update($request->all());
         return response() -> json([
             'status' => $status
         ], 200);

@@ -33,4 +33,23 @@ class SorterController extends Controller
             'sorters' => $sorters
         ], 200);
     }
+
+     //update
+     public function editSorter(Request $request, $id)
+     {
+         $sorters = Sorter::where('id', $id)->first();
+         
+         try {
+             // Update the user details
+             $sorters->update($request->all());
+             return response()->json([
+                 'status' => 'Sorter updated successfully',
+                 'sorters' => $sorters
+             ]);
+         } catch (\Exception $e) {
+             return response()->json([
+                 'error' => $e->getMessage()
+             ]);
+         }
+     }
 }

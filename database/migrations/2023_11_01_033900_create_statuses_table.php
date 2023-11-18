@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('details', function (Blueprint $table) {
+        Schema::create('statuses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('profileAvatar')->nullable();
-            $table->string('images')->nullable();
-            $table->string('companyName');
-            $table->string('companyNumber');
-            $table->string('companyLocation');
+            $table->string('customerName');
+            $table->string('sorterName');
+            $table->string('kiloOfBeans');
+            $table->string('status');
+            $table->timestamps();
+            $table->foreign('customer_id')
+                ->references('id')->on('customers')
+                ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('details');
+        Schema::dropIfExists('statuses');
     }
 };

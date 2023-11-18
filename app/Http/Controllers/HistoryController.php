@@ -29,4 +29,11 @@ class HistoryController extends Controller
             'history' => $customer->history
         ], 200);
     }
+
+    public function fetchHistory($user_id){
+        $history = History::where('user_id', $user_id)->get();
+        return response() -> json([
+            'history' => $history
+        ], 200);
+    }
 }

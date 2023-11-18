@@ -10,14 +10,42 @@ class DetailsController extends Controller
     public function postDetails(Request $request)
     {
         $user_id = $request->input('user_id');
-        $profileAvatar = $request->input('profileAvatar');
+        $profileAvatar = $request->file('profileAvatar');
+        $images = $request->file('images');
         $companyName = $request->input('companyName');
         $companyNumber = $request->input('companyNumber');
         $companyLocation = $request->input('companyLocation');
-        
+
+        $imagePaths = []; // Array to store image paths
+
+        if ($images) {
+            foreach ($images as $image) {
+                if ($image->isValid()) {
+                    $imagePath = $image->store('details', 'public');
+                    $imagePaths[] = $imagePath;
+                } else {
+                    return response()->json(['error' => 'Invalid image file.'], 400);
+                }
+            }
+        }
+
+        $profilePaths = []; // Array to store image paths
+
+        if ($profileAvatar) {
+            foreach ($profileAvatar as $profileImage) {
+                if ($profileImage->isValid()) {
+                    $profilePath = $profileImage->store('details', 'public');
+                    $profilePaths[] = $profilePath;
+                } else {
+                    return response()->json(['error' => 'Invalid image file.'], 400);
+                }
+            }
+        }
+
         $detailsOfUser = Details::create([
             'user_id' => $user_id,
-            'profileAvatar' => $profileAvatar,
+            'profileAvatar' => json_encode($profilePaths),
+            'images' => json_encode($imagePaths), // Store image paths as JSON array
             'companyName' => $companyName,
             'companyNumber' => $companyNumber,
             'companyLocation' => $companyLocation
@@ -28,27 +56,48 @@ class DetailsController extends Controller
             'details' => $detailsOfUser
         ], 200);
     }
-    
-    public function editDetails(Request $request, $id)
-    {
-        $detailsOfUser = Details::find($id);
+
         
-        $profileAvatar = $request->input('profileAvatar');
-        $companyName = $request->input('companyName');
-        $companyNumber = $request->input('companyNumber');
-        $companyLocation = $request->input('companyLocation');
-
-        $detailsOfUser->user_id = 1;
-        $detailsOfUser -> profileAvatar = $profileAvatar;
-        $detailsOfUser -> companyName = $companyName;
-        $detailsOfUser -> companyNumber = $companyNumber;
-        $detailsOfUser -> companyLocation = $companyLocation;
-
-        $detailsOfUser->save();
-
-        return response() -> json([
+    public function editDetails(Request $request, $user_id)
+    {
+        // Find the user details by user_id
+        $detailsOfUser = Details::where('user_id', $user_id)->first();
+    
+        if (!$detailsOfUser) {
+            return response()->json(['error' => 'User details not found.'], 404);
+        }
+    
+        // Handle profileAvatar and images separately
+        if ($request->hasFile('images')) {
+            $imagePath = []; // Array to store image paths
+            $images = $request->file('images');
+            if ($images->isValid()) {
+                $imagePath = $images->store('details', 'public');
+                $imagePaths[] = $imagePath;
+            } else {
+                return response()->json(['error' => 'Invalid profile image file.'], 400);
+            }
+            $detailsOfUser->images = json_encode([$imagePaths]);
+        }
+        // Update the user details using the request data after handling profileAvatar and images
+        $detailsOfUser->update($request->all());
+        return response()->json([
             'status' => 'OK',
             'details' => $detailsOfUser
         ], 200);
+    }
+    
+
+
+
+
+    public function fetchDetails($user_id){
+        $detailsOfUser = Details::where('user_id', $user_id)->first();
+        if (!$detailsOfUser) {
+            return response()->json(['message' => 'Company details not found'], 404);
+        }
+        return response() -> json([
+            'details' => $detailsOfUser
+        ]);
     }
 }

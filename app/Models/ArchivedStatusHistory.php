@@ -4,28 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Customer;
+use App\Models\Archived;
+use App\Models\Status;
 use App\Models\User;
 
-class History extends Model
+class ArchivedStatusHistory extends Model
 {
     use HasFactory;
+    protected $table = 'archived_status_histories';
 
     protected $fillable = [
-        'user_id',
         'customer_id',
+        'status_id',
+        'user_id',
         'customerName',
         'sorterName',
         'kiloOfBeans',
-        'status',
-        'date'
+        'status'
     ];
-
-    public function history(){
-        return $this->belongsTo(Customer::class);
+    public function archiveHistory(){
+        return $this->belongsTo(Archived::class);
     }
-
-    public function histories(){
+    public function archiveID(){
         return $this->belongsTo(User::class);
     }
 }
