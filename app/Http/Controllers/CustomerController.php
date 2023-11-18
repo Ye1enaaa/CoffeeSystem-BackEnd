@@ -89,12 +89,19 @@ class CustomerController extends Controller
 
 
     public function fetchCustomers($user_id){
-        // /$user_id = 1;
         $customer = Customer::where('user_id', $user_id)->get();
-        return response() -> json([
+    
+        if ($customer->isEmpty()) {
+            return response()->json([
+                'customer' => 'Customer Not Found'
+            ], 404);
+        }
+    
+        return response()->json([
             'customer' => $customer
         ]);
     }
+    
 
     //update
     public function editCustomer(Request $request, $id)
@@ -227,9 +234,6 @@ class CustomerController extends Controller
             'archived_status' => $recordsToInsert ?? null
         ]);
     }
-
-    
-
 
     public function fetchArchiveds($user_id){
         $archivedCustomer = Archived::where('user_id', $user_id)->get();

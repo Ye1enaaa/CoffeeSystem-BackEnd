@@ -32,6 +32,13 @@ class LoginController extends Controller
             ], 401);
         }
 
+        // Use Laravel's built-in authentication methods
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'error' => 'Invalid credentials',
+            ], 401);
+        }
+
         // Check if the user is disabled
         if ($user->disabled) {
             Auth::logout(); // Log the user out
