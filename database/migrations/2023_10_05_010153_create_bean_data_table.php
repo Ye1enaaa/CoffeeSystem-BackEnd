@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bean_data', function (Blueprint $table) {
             $table->id();
-            $table->string('good')->nullable();
+            //$table->string('good')->nullable();
             $table->integer('bad')->nullable();
             $table->timestamps();
         });
