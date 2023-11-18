@@ -11,8 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('feedback', function (Blueprint $table) {
-            $table->string('status')->default('Pending'); // Assuming 'pending' is the default status
+        Schema::create('feedback', function (Blueprint $table) {
+            $table->id();
+            $table->string('full_name');
+            $table->string('companyName');
+            $table->string('phoneNum');
+            $table->boolean('coffee_bean_ai_sorter')->default(false); // Checkbox for "Coffee Bean AI Sorter Machine"
+            $table->boolean('website')->default(false); // Checkbox for "Website"
+            $table->string('message');
+            $table->string('email')->unique();
+            $table->string('status')->default('Pending');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('feedback', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        Schema::dropIfExists('feedback');
     }
 };
