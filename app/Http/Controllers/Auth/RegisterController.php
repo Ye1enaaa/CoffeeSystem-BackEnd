@@ -20,7 +20,8 @@ class RegisterController extends Controller
             $userCreds = User::create([
                 'name' => $validate['name'],
                 'email' => $validate['email'],
-                'password' => bcrypt($validate['password'])
+                'password' => bcrypt($validate['password']),
+                'last_login' => now()
             ]);
 
             $token = $userCreds->createToken('token')->plainTextToken;
