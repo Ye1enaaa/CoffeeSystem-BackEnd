@@ -21,7 +21,8 @@ class RegisterController extends Controller
                 'name' => $validate['name'],
                 'email' => $validate['email'],
                 'password' => bcrypt($validate['password']),
-                'last_login' => now()
+                'last_login' => now(),
+                'role' => 2
             ]);
 
             $token = $userCreds->createToken('token')->plainTextToken;

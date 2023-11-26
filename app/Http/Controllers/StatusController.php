@@ -63,8 +63,16 @@ class StatusController extends Controller
 
     public function fetchStatus($user_id){
         $status = Status::where('user_id', $user_id)->get();
+
+        if ($status->isEmpty()) {
+            return response()->json([
+                'status' => 'Status Not Found'
+            ], 404);
+        }
+
         return response() -> json([
             'status' => $status
+            
         ], 200);
     }
 

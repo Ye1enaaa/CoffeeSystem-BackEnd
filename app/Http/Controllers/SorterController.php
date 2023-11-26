@@ -29,6 +29,13 @@ class SorterController extends Controller
 
     public function fetchSorters($user_id){
         $sorters = Sorter::where('user_id', $user_id)->get();
+
+        if ($sorters->isEmpty()) {
+            return response()->json([
+                'status' => 'Sorters Not Found'
+            ], 404);
+        }
+
         return response() -> json([
             'sorters' => $sorters
         ], 200);
