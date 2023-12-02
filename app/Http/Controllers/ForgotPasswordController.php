@@ -22,7 +22,6 @@ class ForgotPasswordController extends Controller
     {
        
         $otp = mt_rand(1000, 9999);
-    
         
         $email = $request->input('email'); 
         Mail::to($email)->send(new SendOTPMail($otp));
