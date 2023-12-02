@@ -32,6 +32,11 @@ class HistoryController extends Controller
 
     public function fetchHistory($user_id){
         $history = History::where('user_id', $user_id)->get();
+        if ($history->isEmpty()) {
+            return response()->json([
+                'status' => 'No Activities Found'
+            ], 404);
+        }
         return response() -> json([
             'history' => $history
         ], 200);
