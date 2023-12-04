@@ -24,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bean_data');
+        Schema::table('bean_data', function (Blueprint $table) {
+            //
+        });
     }
 };

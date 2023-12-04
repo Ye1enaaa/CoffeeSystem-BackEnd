@@ -22,7 +22,6 @@ class ForgotPasswordController extends Controller
     {
        
         $otp = mt_rand(1000, 9999);
-    
         
         $email = $request->input('email'); 
         Mail::to($email)->send(new SendOTPMail($otp));
@@ -60,7 +59,7 @@ class ForgotPasswordController extends Controller
         $newPassword = $request->input('password');
     
         $user->password = bcrypt($newPassword);
-    
+        $user->email_verified_at = Carbon::now();
         $user->update();
 
         return response()->json([

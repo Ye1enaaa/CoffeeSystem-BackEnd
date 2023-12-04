@@ -79,7 +79,7 @@ class CustomerController extends Controller
             ]);
             
             return response() -> json([
-                'status' => 'OK',
+                'status' => 'succeeded',
                 'customer' => $customer
             ], 200);
         }
