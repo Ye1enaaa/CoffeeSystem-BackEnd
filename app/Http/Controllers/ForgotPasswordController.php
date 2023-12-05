@@ -57,7 +57,6 @@ class ForgotPasswordController extends Controller
         $user = User::find($id);
     
         $newPassword = $request->input('password');
-    
         $user->password = bcrypt($newPassword);
         $user->email_verified_at = Carbon::now();
         $user->update();

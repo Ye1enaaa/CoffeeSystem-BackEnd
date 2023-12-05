@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('generate_keys', function (Blueprint $table) {
             $table->id();
+            $table->string('email')->unique();
             $table->unsignedBigInteger('user_id');
             $table->string('special_key')->unique();
             $table->timestamps();
@@ -27,6 +28,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('generate_keys');
+        Schema::table('generate_keys', function (Blueprint $table) {
+            //
+        });
     }
 };
