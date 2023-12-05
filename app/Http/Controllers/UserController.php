@@ -8,6 +8,10 @@ use App\Models\Admin;
 use App\Models\GenerateKeys;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Encryption\DecryptException;
+use App\Mail\SendKeyMail;
+use Mail;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -83,21 +87,65 @@ class UserController extends Controller
             'companies' => $companies
         ]);
     }
-    public function generateRandomKey()
+    public function generateRandomKey(Request $request)
     {
-        $length = 24; // adjust the length of the random key as needed.
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+{}[]|;:,.<>?'; // Define the characters.
+        $email = $request->input('email'); 
+
+        $length = 12; // adjust the length of the random key as needed.
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&<>?'; // Define the characters.
 
         $randomKey = '';
 
         for ($i = 0; $i < $length; $i++) {
             $randomKey .= $characters[random_int(0, strlen($characters) - 1)];
         }
-        
-        GenerateKeys::create(['special_key' => $randomKey,'user_id' => auth()->user()->id]);
 
-        return response()->json(['random_key' => $randomKey]);
+        Mail::to($email)->send(new SendKeyMail($randomKey));
+
+        $encryptedKey = bcrypt($randomKey);
+        
+        GenerateKeys::create(
+            [
+            'email' => $email,
+            'special_key' => $encryptedKey,
+            'user_id' => auth()->user()->id
+            ]
+        );
+
+        return response()->json([
+            'random_key' => $randomKey,
+            'email' => $email,
+            'key' => $encryptedKey
+        ]);
     }
+
+    public function verifyKey(Request $request)
+    {
+        $userInput = $request->input('keyInput');
+        $email = $request->input('email');
+
+        // Retrieve the user by email
+        $user = GenerateKeys::where('email', $email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'User not found',
+            ], 404);
+        }
+
+        // Use Hash::check to compare user input with hashed special key
+        if (Hash::check($userInput, $user->special_key)) {
+            return response()->json([
+                'status' => 'Key matches',
+                'message' => 'Success',
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'Key does not match',
+            ], 401);
+        }
+    }
+
 
     public function fetchRandomKey($user_id)
     {
@@ -120,5 +168,4 @@ class UserController extends Controller
             'status' => 'Deleted',
         ], 200);
     }
-
 }
