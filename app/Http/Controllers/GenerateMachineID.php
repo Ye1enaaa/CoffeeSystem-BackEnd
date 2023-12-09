@@ -35,7 +35,7 @@ class GenerateMachineID extends Controller
         ]);
     }
 
-    public function fetchMachineID(Request $request)
+    public function fetchMachineID($user_id)
     {
         $machineId = Machine::all();
         
