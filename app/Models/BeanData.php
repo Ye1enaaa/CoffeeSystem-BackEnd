@@ -10,6 +10,7 @@ class BeanData extends Model
     use HasFactory;
 
     protected $fillable = [
+        'machineID',
         'bad'
     ];
 }
