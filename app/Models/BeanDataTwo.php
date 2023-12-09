@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BeanData extends Model
+class BeanDataTwo extends Model
 {
     use HasFactory;
 
@@ -13,4 +13,5 @@ class BeanData extends Model
         'machineID',
         'bad'
     ];
+    
 }
