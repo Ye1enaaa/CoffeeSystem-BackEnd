@@ -14,6 +14,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\GenerateMachineID;
 
 Route::post('/login' , [LoginController::class,'login']);
 Route::post('/register/users', [RegisterController::class, 'register']);
@@ -68,3 +69,5 @@ Route::post('/verify-otp' , [ForgotPasswordController::class, 'verifyOTP']);
 Route::post('/verify-key' , [UserController::class, 'verifyKey']);
 Route::post('/post-feedback', [FeedbackController::class, 'postFeedback']);
 Route::get('/fetch-feedback/{user_id}', [FeedbackController::class, 'fetchFeedback']);
+
+Route::post('/generate-machineid' , [GenerateMachineID::class, 'generateMachineID']);
