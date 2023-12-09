@@ -35,4 +35,15 @@ class GenerateMachineID extends Controller
         ]);
     }
 
+    public function fetchMachineID(Request $request)
+    {
+        $machineId = Machine::all();
+        
+        if ($machineId) {
+            return response()->json(['machineId' => $machineId]);
+        } else {
+            return response()->json(['message' => 'machine id not found']);
+        }
+    }
+
 }

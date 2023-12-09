@@ -33,6 +33,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
     Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
 
+    Route::post('/generate-machineid' , [GenerateMachineID::class, 'generateMachineID']);
+    Route::get('/fetch-machineid' , [GenerateMachineID::class, 'fetchMachineID']);
+
     //Route::post('/add/customer', [CustomerController::class, 'addCustomer']);
     Route::post('/add/sorter', [SorterController::class, 'addSorter']);
     Route::patch('/edit/sorter/{id}', [SorterController::class, 'editSorter']);
@@ -72,5 +75,3 @@ Route::post('/verify-otp' , [ForgotPasswordController::class, 'verifyOTP']);
 Route::post('/verify-key' , [UserController::class, 'verifyKey']);
 Route::post('/post-feedback', [FeedbackController::class, 'postFeedback']);
 Route::get('/fetch-feedback/{user_id}', [FeedbackController::class, 'fetchFeedback']);
-
-Route::post('/generate-machineid' , [GenerateMachineID::class, 'generateMachineID']);
