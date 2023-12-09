@@ -10,12 +10,14 @@ class BeanCounterController extends Controller
 {
     public function fetchBeanCount(){
         $bean = BeanData::latest()->first();
+        $allBeans = BeanData::all();
         $finishedStatus = Status::where('status', 'Finished')->get();
         $totalBeans = $finishedStatus->sum('kiloOfBeans');
         $intTotalBeans = intval($totalBeans * 1000);
         $goodBeans = floatval($intTotalBeans) - floatval($bean->bad) * 0.5;
         return response()->json([
             'beans' => $bean,
+            'allBeans' => $allBeans,
             'goodbeans' => round($goodBeans),
             'status' => $finishedStatus,
             'total' => $totalBeans

@@ -7,27 +7,40 @@ use App\Models\Sorter;
 class SorterController extends Controller
 {
     public function addSorter(Request $request){
-        $validate = $request->validate([
-            'sorterName' => 'required|string|max:50',
-            'phoneNum' => 'required|string',
-            'address' => 'required|string|max:100',
-            'dateHired' => 'required'
-        ]);
         $user_id = $request->input('user_id');
-        $sorter = Sorter::create([
-            'user_id' => $user_id,
-            'sorterName' => $validate['sorterName'],
-            'phoneNum' => $validate['phoneNum'],
-            'address' => $validate['address'],
-            'dateHired' => $validate['dateHired']
-        ]);
-        return response() -> json([
-            'status' => 'OK',
-            'sorter' => $sorter
-        ], 200);
+        $sorterName = $request->input('sorterName');
+        $phoneNum = $request->input('phoneNum');
+        $address = $request->input('address');
+        $dateHired = $request->input('dateHired');
+
+        $user_id = $request->input('user_id');
+
+        $existingSorter = Sorter::where('user_id', $user_id)
+            ->where('sorterName', $sorterName)
+            ->first();
+
+        if($existingSorter){  
+            return response() -> json([
+                'error' => 'Sorter is in the database already'
+            ], 422);
+        } else {
+            $sorter = Sorter::create([
+                'user_id' => $user_id,
+                'sorterName' => $sorterName,
+                'phoneNum' => $phoneNum,
+                'address' => $address,
+                'dateHired' => $dateHired
+            ]);
+                    
+            return response() -> json([
+                'status' => 'succeeded',
+                'sorter' => $sorter
+            ], 200);
+        }
     }
 
-    public function fetchSorters($user_id){
+    public function fetchSorters($user_id)
+    {
         $sorters = Sorter::where('user_id', $user_id)->get();
 
         if ($sorters->isEmpty()) {
