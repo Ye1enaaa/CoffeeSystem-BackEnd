@@ -11,6 +11,7 @@ class BeanCounterController extends Controller
 {
     public function fetchBeanCount(){
         $bean = BeanData::latest()->first();
+        //$beantwo = BeanDataTwo::latest()->first();
         $allBeans = BeanData::all();
         $finishedStatus = Status::where('status', 'Finished')->get();
         $totalBeans = $finishedStatus->sum('kiloOfBeans');

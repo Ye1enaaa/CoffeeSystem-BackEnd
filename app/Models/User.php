@@ -27,6 +27,7 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
+        'formattedId',
         'disabled',
         'last_login'
     ];

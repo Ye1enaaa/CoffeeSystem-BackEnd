@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::post('/generate-machineid' , [GenerateMachineID::class, 'generateMachineID']);
     Route::get('/fetch-machine-id/{user_id}' , [GenerateMachineID::class, 'fetchMachineID']);
+    Route::patch('/machine-id/{id}', [UserController::class, 'setMachineId']);
 
     //Route::post('/add/customer', [CustomerController::class, 'addCustomer']);
     Route::post('/add/sorter', [SorterController::class, 'addSorter']);
