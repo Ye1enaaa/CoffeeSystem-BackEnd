@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('formattedId')->unique();
+            $table->string('formattedId')->nullable();
             $table->foreign('formattedId')
                 ->references('formattedId')->on('machines')
                 ->onDelete('cascade')->onUpdate('cascade');
@@ -24,8 +24,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::table('user', function (Blueprint $table) {
-        //     //
-        // });
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['formattedId']);
+            $table->dropColumn('formattedId');
+        });
     }
 };
