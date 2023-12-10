@@ -9,16 +9,30 @@ use App\Models\BeanDataTwo;
 use App\Models\Status;
 class BeanCounterController extends Controller
 {
-    public function fetchBeanCount(){
-        $bean = BeanData::latest()->first();
-        //$beantwo = BeanDataTwo::latest()->first();
-        $allBeans = BeanData::all();
+    public function fetchBeanCount($machineID)
+    {
+        // Get the latest BeanData for the specified machineID
+        $latestBeanData = BeanData::where('machineID', $machineID);
+
+        // Get the latest overall BeanData
+        $latestOverallBeanData = $latestBeanData->latest()->first();
+
+        // Get all BeanData records for the specified machineID
+        $allBeans = BeanData::where('machineID', $machineID)->get();
+
+        // Get all finished statuses
         $finishedStatus = Status::where('status', 'Finished')->get();
+
+        // Calculate total kilos of beans
         $totalBeans = $finishedStatus->sum('kiloOfBeans');
+
+        // Calculate total kilos of good beans
         $intTotalBeans = intval($totalBeans * 1000);
-        $goodBeans = floatval($intTotalBeans) - floatval($bean->bad) * 0.5;
+        $goodBeans = $intTotalBeans - $latestOverallBeanData->bad * 0.5;
+
+        // Return the response
         return response()->json([
-            'beans' => $bean,
+            'beans' => $latestOverallBeanData,
             'allBeans' => $allBeans,
             'goodbeans' => round($goodBeans),
             'status' => $finishedStatus,
