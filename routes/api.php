@@ -66,7 +66,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 });
 Route::post('/reset-password' , [ForgotPasswordController::class, 'sendOTP']);
 Route::get('/companies', [UserController::class, 'getCompaniesInfo']);
-Route::get('/count/{machineId}', [BeanCounterController::class, 'fetchBeanCount']);
+Route::get('/count/{machineId}/{id}', [BeanCounterController::class, 'fetchBeanCount']);
 
 Route::post('/post-count', [BeanCounterController::class, 'postBeanCount']);
 Route::post('/second-post-count', [BeanCounterController::class, 'secondPostBeanCount']);
