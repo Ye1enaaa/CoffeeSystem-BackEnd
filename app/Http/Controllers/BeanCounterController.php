@@ -30,7 +30,6 @@ class BeanCounterController extends Controller
 
         // Calculate total kilos of bad beans
         $totalBeans = $finishedStatus->sum('kiloOfBeans');
-        $totalBadBeans = $latestBeanDataTwos->sum('bad');
 
         // Convert kilo to grams
         $intTotalBeans = intval($totalBeans * 1000);
@@ -51,7 +50,7 @@ class BeanCounterController extends Controller
             'TotalBadBeans' => $totalBad,
             'GramsBadBeans' => $kiloBeans,
             'kiloGoodBeans' => $good,
-            'bad' => $totalBadBeans,
+            // 'kiloBeans2' => $kiloBeans2,
             'allBeans' => $allBeans,
             'goodbeans' => round($goodBeans),
             'status' => $finishedStatus,
