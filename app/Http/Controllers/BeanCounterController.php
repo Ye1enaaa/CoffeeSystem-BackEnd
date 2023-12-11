@@ -13,9 +13,13 @@ class BeanCounterController extends Controller
     {
         // Get the latest BeanData for the specified machineID
         $latestBeanData = BeanData::where('machineID', $machineID);
+        $latestBeanDataTwos = BeanDataTwo::where('machineID', $machineID);
 
         // Get the latest overall BeanData
         $latestOverallBeanData = $latestBeanData->latest()->first();
+
+        // Get the latest overall BeanDataTwo
+        $latestOverallBeanDataTWo = $latestBeanDataTwos->latest()->first();
 
         // Get all BeanData records for the specified machineID
         $allBeans = BeanData::where('machineID', $machineID)->get();
@@ -24,18 +28,31 @@ class BeanCounterController extends Controller
                        ->where('status', 'Finished')
                        ->get();
 
-        // Calculate total kilos of beans
+        // Calculate total kilos of bad beans
         $totalBeans = $finishedStatus->sum('kiloOfBeans');
 
-        // Calculate total kilos of good beans
+        // Convert kilo to grams
         $intTotalBeans = intval($totalBeans * 1000);
-        $goodBeans = $intTotalBeans - $latestOverallBeanData->bad * 0.5;
+        // $goodBeans = $intTotalBeans - $latestOverallBeanData->bad * 0.5;
+
+        //convert to grams to kilo
+        $totalBad = $latestOverallBeanData->bad + $latestOverallBeanDataTWo->bad;
+        $kiloBeans = $totalBad * 0.5 / 1000;
+        $kiloBeansTwo = $latestOverallBeanDataTWo->bad * 0.5 / 1000;
+        $good = $intTotalBeans - $kiloBeans;
+        $kiloBeans2 = $intTotalBeans - $kiloBeans;
+        $TotalkiloBeans = $kiloBeans + $kiloBeans2;
 
         // Return the response
         return response()->json([
             'beans' => $latestOverallBeanData,
+            'total' => $kiloBeans2,
+            'TotalBadBeans' => $totalBad,
+            'GramsBadBeans' => $kiloBeans,
+            'kiloGoodBeans' => $good / 1000,
+            // 'kiloBeans2' => $kiloBeans2,
             'allBeans' => $allBeans,
-            'goodbeans' => round($goodBeans),
+            // 'goodbeans' => round($goodBeans),
             'status' => $finishedStatus,
             'total' => $totalBeans
         ]);
