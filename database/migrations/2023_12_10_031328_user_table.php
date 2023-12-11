@@ -11,16 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->integer('role')->default(2);
-            $table->string('email')->unique();
+        Schema::table('users', function (Blueprint $table) {
             $table->string('formattedId')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
             $table->foreign('formattedId')
                 ->references('formattedId')->on('machines')
                 ->onDelete('cascade')->onUpdate('cascade');
@@ -32,6 +24,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['formattedId']);
+            $table->dropColumn('formattedId');
+        });
     }
 };

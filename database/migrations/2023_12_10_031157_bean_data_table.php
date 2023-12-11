@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bean_data', function (Blueprint $table) {
-            $table->id();
+        Schema::table('bean_data', function (Blueprint $table) {
             $table->string('machineID')->nullable();
-            $table->integer('bad')->nullable();
-            $table->timestamps();
         });
     }
 
@@ -24,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('bean_data', function (Blueprint $table) {
-            //
-        });
+        // Schema::table('bean_data', function (Blueprint $table) {
+        //     //
+        // });
     }
 };

@@ -14,6 +14,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\GenerateMachineID;
 
 Route::post('/login' , [LoginController::class,'login']);
 Route::post('/register/users', [RegisterController::class, 'register']);
@@ -31,6 +32,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/logout' , [LogoutController::class, 'logOut']);
     Route::get('/customers/{user_id}', [CustomerController::class, 'fetchCustomers']);
     Route::get('/sorters/{user_id}', [SorterController::class, 'fetchSorters']);
+
+    Route::post('/generate-machineid' , [GenerateMachineID::class, 'generateMachineID']);
+    Route::get('/fetch-machine-id/{user_id}' , [GenerateMachineID::class, 'fetchMachineID']);
+    Route::patch('/machine-id/{id}', [UserController::class, 'setMachineId']);
 
     //Route::post('/add/customer', [CustomerController::class, 'addCustomer']);
     Route::post('/add/sorter', [SorterController::class, 'addSorter']);
@@ -61,8 +66,11 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 });
 Route::post('/reset-password' , [ForgotPasswordController::class, 'sendOTP']);
 Route::get('/companies', [UserController::class, 'getCompaniesInfo']);
-Route::get('/count', [BeanCounterController::class, 'fetchBeanCount']);
+Route::get('/count/{machineId}/{id}', [BeanCounterController::class, 'fetchBeanCount']);
+
 Route::post('/post-count', [BeanCounterController::class, 'postBeanCount']);
+Route::post('/second-post-count', [BeanCounterController::class, 'secondPostBeanCount']);
+
 Route::put('/user-edit/{id}', [ForgotPasswordController::class, 'passwrdEdit']);
 Route::post('/verify-otp' , [ForgotPasswordController::class, 'verifyOTP']);
 Route::post('/verify-key' , [UserController::class, 'verifyKey']);

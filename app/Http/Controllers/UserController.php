@@ -65,6 +65,24 @@ class UserController extends Controller
         return response()->json(['user' => $user], 200);
     }
 
+    public function setMachineId(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check if 'disabled' is present in the request
+        if ($request->has('formatedId')) {
+            // Disable the user
+            $user->formattedId = $request->boolean('formattedId');
+            $user->save();
+        }
+
+        // Update other user details if needed
+        $user->update($request->except('disabled'));
+
+        // Return success response
+        return response()->json(['user' => $user], 200);
+    }
+
      //delete
      public function deleteUser($id){
         $user = User::findOrFail($id);

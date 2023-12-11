@@ -12,6 +12,7 @@ use App\Models\ArchivedStatusHistory;
 use App\Models\Sorter;
 use App\Models\Details;
 use App\Models\GenerateKeys;
+use App\Models\Machine;
 use App\Models\History;
 class User extends Authenticatable
 {
@@ -27,6 +28,7 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
+        'formattedId',
         'disabled',
         'last_login'
     ];
@@ -72,5 +74,8 @@ class User extends Authenticatable
     }
     public function histories(){
         return $this->belongsTo(History::class, 'user_id');
+    }
+    public function machine(){
+        return $this->belongsTo(Machine::class, 'formattedId');
     }
 }
