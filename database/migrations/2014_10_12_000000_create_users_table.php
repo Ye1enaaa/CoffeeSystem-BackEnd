@@ -21,9 +21,6 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('formattedId')
-                ->references('formattedId')->on('machines')
-                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
