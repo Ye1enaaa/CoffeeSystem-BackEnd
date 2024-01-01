@@ -7,6 +7,7 @@ use App\Models\BeanCount;
 use App\Models\BeanData;
 use App\Models\BeanDataTwo;
 use App\Models\Status;
+use App\Models\Customer;
 class BeanCounterController extends Controller
 {
     public function fetchBeanCount($machineID, $userId)
@@ -85,6 +86,19 @@ class BeanCounterController extends Controller
         return response()->json([
             'message' => 'OK',
             'data' => $beanData
+        ], 200);
+    }
+
+    public function insertBadCount(Request $request){
+        $statusId = $request->input('statusId');
+        $badCount = $request->input('bad');
+        $customer = Status::where('id', $statusId)->first();
+        
+        $customer->badCount = $badCount;
+        $customer->save();
+
+        return response()->json([
+            'msg' => $customer 
         ], 200);
     }
 }
