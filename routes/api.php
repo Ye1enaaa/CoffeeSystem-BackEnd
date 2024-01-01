@@ -70,7 +70,7 @@ Route::get('/count/{machineId}/{id}', [BeanCounterController::class, 'fetchBeanC
 
 Route::post('/post-count', [BeanCounterController::class, 'postBeanCount']);
 Route::post('/second-post-count', [BeanCounterController::class, 'secondPostBeanCount']);
-
+Route::post('/insert-data' , [BeanCounterController::class, 'insertBadCount']);
 Route::put('/user-edit/{id}', [ForgotPasswordController::class, 'passwrdEdit']);
 Route::post('/verify-otp' , [ForgotPasswordController::class, 'verifyOTP']);
 Route::post('/verify-key' , [UserController::class, 'verifyKey']);

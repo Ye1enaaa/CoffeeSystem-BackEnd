@@ -17,6 +17,7 @@ class Status extends Model
         'customerName',
         'sorterName',
         'kiloOfBeans',
+        'badCount',
         'status'
     ];
 
