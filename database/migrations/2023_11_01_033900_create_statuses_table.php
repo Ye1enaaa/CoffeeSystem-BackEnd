@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('sorterName');
             $table->string('kiloOfBeans');
             $table->string('status');
+            $table->integer('goodCount')->nullable();
             $table->integer('badCount')->nullable();
             $table->timestamps();
             $table->foreign('customer_id')
